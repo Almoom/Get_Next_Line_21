@@ -24,13 +24,9 @@ static int	ft_getbuf(char **arr, char **line)
 	{
 		*str = '\0';
 		*line = ft_strdup(*arr);
-		tmp = ft_strdup(str + 1);
 		free(*arr);
-		if (tmp)
-		{
-			*arr = ft_strdup(tmp);
-			free(tmp);
-		}
+		if ((tmp = ft_strdup(str + 1)))
+			*arr = tmp;
 	}
 	else
 	{
@@ -47,7 +43,7 @@ int			get_next_line(const int fd, char **line)
 	static char	*arr[10240];
 	char		*tmp;
 
-	if (fd < 0 || read(fd, buf, 0) < 0 || !line)
+	if (fd < 0 || read(fd, NULL, 0) < 0 || !line)
 		return (-1);
 	if (!(arr[fd]))
 		arr[fd] = ft_strnew(0);
@@ -59,10 +55,9 @@ int			get_next_line(const int fd, char **line)
 			break ;
 		tmp = ft_strjoin(arr[fd], buf);
 		free(arr[fd]);
-		arr[fd] = ft_strdup(tmp);
+		arr[fd] = tmp;
 		if (!(arr[fd]))
 			arr[fd] = ft_strnew(0);
-		free(tmp);
 	}
 	return (ft_getbuf(&arr[fd], line));
 }
